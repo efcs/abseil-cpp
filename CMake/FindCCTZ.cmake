@@ -15,31 +15,10 @@
 #
 
 include(FindPackageHandleStandardArgs)
-include(ExternalProject)
-
-if (ABSL_BUILD_DEPS_FROM_SOURCE)
-set(CCTZ_FOUND ON)
-set(CCTZ_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/google-cctz)
-set(CCTZ_LIBRARIES ${CCTZ_PREFIX}/src/libcctz.a)
-set(CCTZ_INCLUDE_DIRS ${CCTZ_PREFIX}/src/include)
-ExternalProject_Add(google-cctz
-        PREFIX google-cctz
-        SOURCE_DIR ${CCTZ_PREFIX}/src
-        STAMP_DIR ${CCTZ_PREFIX}/stamp
-        GIT_REPOSITORY https://github.com/google/cctz.git
-        CONFIGURE_COMMAND ""
-        BUILD_ALWAYS ON
-        BUILD_IN_SOURCE ON
-        BUILD_COMMAND make
-        BUILD_BYPRODUCTS ${CCTZ_LIBRARIES}
-        INSTALL_COMMAND "")
-else()
 
 find_path(CCTZ_INCLUDE_DIRS NAMES  cctz/civil_time.h)
 find_library(CCTZ_LIBRARIES NAMES cctz )
 find_package_handle_standard_args(CCTZ DEFAULT_MSG CCTZ_INCLUDE_DIRS CCTZ_LIBRARIES)
-
-endif()
 
 mark_as_advanced(CCTZ_FOUND CCTZ_INCLUDE_DIRS CCTZ_LIBRARIES)
 

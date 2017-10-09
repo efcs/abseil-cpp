@@ -31,25 +31,25 @@ option(ABSL_ENABLE_PIC "Enable / disable position-independent code generation" O
 set(ABSL_STD_CXX_FLAG "${CMAKE_CXX_STD_CXX11}" CACHE STRING "c++ std flag (default: c++11)")
 
 option(ABSL_BUILD_DEPS_FROM_SOURCE "Enable building Abseils dependancies from source" OFF)
-if (ABSL_BUILD_DEPS_FROM_SOURCE)
-  add_subdirectory(deps/)
-endif()
 
 
 # pthread
 find_package(Threads REQUIRED)
 
 # check for GTest
-find_package(GTest REQUIRED)
-find_package(GMock REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS} ${GMOCK_INCLUDE_DIRS})
+if (ABSL_BUILD_DEPS_FROM_SOURCE)
+  include(BuildExternalDeps)
+else()
+  find_package(GTest REQUIRED)
+  find_package(GMock REQUIRED)
+  find_package(CCTZ REQUIRED)
+endif()
 
-# check for other google dependencies
-find_package(CCTZ REQUIRED)
-include_directories(${CCTZ_INCLUDE_DIRS})
-
-# include current path
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(
+    ${GTEST_INCLUDE_DIRS}
+    ${GMOCK_INCLUDE_DIRS}
+    ${CCTZ_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR})
 
 # -std=X
 set(CMAKE_CXX_FLAGS "${ABSL_STD_CXX_FLAG} ${CMAKE_CXX_FLAGS}")

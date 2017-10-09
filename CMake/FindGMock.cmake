@@ -16,12 +16,10 @@
 
 include(FindPackageHandleStandardArgs)
 
-
 find_path(GMOCK_INCLUDE_DIRS NAMES  gmock/gmock.h)
 find_library(GMOCK_LIBRARIES NAMES gmock )
 
 find_package_handle_standard_args(GMOCK DEFAULT_MSG GMOCK_INCLUDE_DIRS GMOCK_LIBRARIES)
-
 mark_as_advanced(GMOCK_FOUND GMOCK_INCLUDE_DIRS GMOCK_LIBRARIES)
 
 
