@@ -29,19 +29,23 @@ string(REPLACE "-std=" "" STD_VER "${ABSL_STD_CXX_FLAG}")
 ExternalProject_Add(google-cctz
         PREFIX google-cctz
         SOURCE_DIR ${CCTZ_PREFIX}/src
+        BINARY_DIR ${CCTZ_PREFIX}/build
         STAMP_DIR ${CCTZ_PREFIX}/stamp
         INSTALL_DIR ${INSTALL_PREFIX}
         GIT_REPOSITORY https://github.com/google/cctz.git
         CONFIGURE_COMMAND ""
         BUILD_ALWAYS ON
-        BUILD_IN_SOURCE ON
         BUILD_COMMAND
-          make
+          make -C <BINARY_DIR>
+          -f <SOURCE_DIR>/Makefile
+          SRC=<SOURCE_DIR>/
           CXX=${CMAKE_CXX_COMPILER}
           STD=${STD_VER}
-        BUILD_BYPRODUCTS ${CCTZ_LIBRARIES}
         INSTALL_COMMAND
-          make
+          make -C <BINARY_DIR>
+          -f <SOURCE_DIR>/Makefile
+          install
+          SRC=<SOURCE_DIR>/
           CXX=${CMAKE_CXX_COMPILER}
           STD=${STD_VER}
           PREFIX=<INSTALL_DIR>
@@ -67,5 +71,5 @@ ExternalProject_Add(google-test
             -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
           )
 
-mark_as_advanced(GTEST_FOUND GTEST_INCLUDE_DIRS GTEST_LIBRARIES)
+mark_as_advanced(GTEST_FOUND GTEST_INCLUDE_DIRS GTEST_LIBRARIES GTEST_MAIN_LIBRARIES)
 mark_as_advanced(GMOCK_FOUND GMOCK_INCLUDE_DIRS GMOCK_LIBRARIES)
