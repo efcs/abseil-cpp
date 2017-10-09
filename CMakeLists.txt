@@ -30,6 +30,11 @@ include(AbseilHelpers)
 option(ABSL_ENABLE_PIC "Enable / disable position-independent code generation" OFF)
 set(ABSL_STD_CXX_FLAG "${CMAKE_CXX_STD_CXX11}" CACHE STRING "c++ std flag (default: c++11)")
 
+option(ABSL_BUILD_DEPS_FROM_SOURCE "Enable building Abseils dependancies from source" OFF)
+if (ABSL_BUILD_DEPS_FROM_SOURCE)
+  add_subdirectory(deps/)
+endif()
+
 
 # pthread
 find_package(Threads REQUIRED)

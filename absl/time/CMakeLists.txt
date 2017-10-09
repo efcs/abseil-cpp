@@ -25,6 +25,10 @@ list(APPEND TIME_SRC
     ${TIME_PUBLIC_HEADERS}
     ${TIME_INTERNAL_HEADERS}
 )
+if (TARGET google-cctz)
+  message("SHIT")
+
+endif()
 set(TIME_PUBLIC_LIBRARIES base stacktrace int128 ${CCTZ_LIBRARIES})
 
 abseil_library(time STATIC)
