@@ -18,24 +18,24 @@ file(GLOB NUMERIC_PUBLIC_HEADERS "*.h")
 file(GLOB NUMERIC_INTERNAL_HEADERS "internal/*.h")
 
 # library 128
-list(APPEND INT128_SRC
-    "int128.cc"
+abseil_library(int128
+    int128.cc
+ADDITIONAL_HEADERS
     ${NUMERIC_PUBLIC_HEADERS}
     ${NUMERIC_INTERNAL_HEADERS}
 )
-abseil_library(int128)
 
 install(FILES ${NUMERIC_PUBLIC_HEADERS}
         DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/absl/numeric)
 install(FILES ${NUMERIC_INTERNAL_HEADERS}
         DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/absl/numeric/internal)
 
-
-# test int128_test
-set(INT128_TEST_SRC "int128_test.cc")
-set(INT128_TEST_PUBLIC_LIBRARIES int128 base)
-
-abseil_test(int128_test)
+abseil_test(int128_test
+    int128_test.cc
+LINK_LIBS
+    int128
+    base
+)
 
 
 

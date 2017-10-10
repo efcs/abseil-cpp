@@ -23,24 +23,18 @@ install(FILES ${ALGORITHM_PUBLIC_HEADERS}
 install(FILES ${ALGORITHM_INTERNAL_HEADERS}
         DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/absl/algorithm/internal)
 
-
 #
 ## TESTS
 #
 
 # test algorithm_test
-list(APPEND ALGORITHM_TEST_SRC
-    "algorithm_test.cc"
+abseil_test(algorithm_test
+    algorithm_test.cc
+ADDITIONAL_HEADERS
     ${ALGORITHM_PUBLIC_HEADERS}
     ${ALGORITHM_INTERNAL_HEADERS}
 )
 
-abseil_test(algorithm_test)
-
-
-
-
-# test container_test
-set(CONTAINER_TEST_SRC "container_test.cc")
-
-abseil_test(container_test)
+abseil_test(container_test
+    container_test.cc
+)

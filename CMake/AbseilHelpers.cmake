@@ -16,37 +16,46 @@
 
 
 function(abseil_library Name)
+    cmake_parse_arguments(ARG
+        ""
+        "INSTALL"
+        "ADDITIONAL_HEADERS;DEPENDS;LINK_LIBS;COMPILE_FLAGS"
+        ${ARGN})
     string(TOUPPER ${Name} UPPER_NAME)
-
-    add_library(${Name} STATIC ${${UPPER_NAME}_SRC})
-
+    set(sources ${ARG_UNPARSED_ARGUMENTS} ${ARG_ADDITIONAL_HEADERS})
+    add_library(${Name} STATIC ${sources})
+    if (ARG_DEPENDS)
+     add_dependencies(${Name} ${ARG_DEPENDS})
+    endif()
     target_compile_options(${Name} PRIVATE ${ABSL_COMPILE_CXXFLAGS} )
-    target_link_libraries(${Name} ${${UPPER_NAME}_PUBLIC_LIBRARIES})
+    target_link_libraries(${Name} ${ARG_LINK_LIBS})
 
-
-
-    if(NOT ${${UPPER_NAME}_DISABLE_INSTALL})
+    if(${ARG_INSTALL})
         install(TARGETS ${Name}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
         )
     endif()
-
 endfunction()
 
 
 function(abseil_test Name)
+    cmake_parse_arguments(ARG
+        ""
+        ""
+        "ADDITIONAL_HEADERS;DEPENDS;LINK_LIBS;COMPILE_FLAGS"
+        ${ARGN})
     string(TOUPPER ${Name} UPPER_NAME)
-
-    add_executable(${Name}_bin ${${UPPER_NAME}_SRC})
-
-    target_compile_options(${Name}_bin PRIVATE ${ABSL_COMPILE_CXXFLAGS} ${${UPPER_NAME}_PRIVATE_COMPILE_FLAGS})
-    target_link_libraries(${Name}_bin ${${UPPER_NAME}_PUBLIC_LIBRARIES} ${ABSL_TEST_COMMON_LIBRARIES})
-
+    set(sources ${ARG_UNPARSED_ARGUMENTS} ${ARG_ADDITIONAL_HEADERS})
+    add_executable(${Name}_bin ${sources})
+    add_dependencies(${Name}_bin google-test ${ARG_DEPENDS})
+    target_compile_options(${Name}_bin
+      PRIVATE
+        ${ABSL_COMPILE_CXXFLAGS} ${ARG_COMPILE_FLAGS})
+    target_link_libraries(${Name}_bin
+        ${ARG_LINK_LIBS} ${ABSL_TEST_COMMON_LIBRARIES})
 
     add_test(${Name}_test ${Name}_bin)
-
-
 endfunction()
 
 

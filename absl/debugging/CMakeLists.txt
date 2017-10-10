@@ -17,16 +17,15 @@
 file(GLOB DEBUGGING_PUBLIC_HEADERS "*.h")
 file(GLOB DEBUGGING_INTERNAL_HEADERS "internal/*.h")
 
-list(APPEND STACKTRACE_SRC
-    "stacktrace.cc"
-    "internal/address_is_readable.cc"
-    "internal/elf_mem_image.cc"
-    "internal/vdso_support.cc"
+abseil_library(stacktrace
+    stacktrace.cc
+    internal/address_is_readable.cc
+    internal/elf_mem_image.cc
+    internal/vdso_support.cc
+ADDITIONAL_HEADERS
     ${DEBUGGING_PUBLIC_HEADERS}
     ${DEBUGGING_INTERNAL_HEADERS}
 )
-
-abseil_library(stacktrace)
 
 
 install(FILES ${DEBUGGING_PUBLIC_HEADERS}

@@ -20,18 +20,12 @@ install(FILES ${MEMORY_PUBLIC_HEADERS}
         DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/absl/memory)
 
 
-#
-## TESTS
-#
-
-# test memory_test
-list(APPEND MEMORY_TEST_SRC
-    "memory_test.cc"
+abseil_test(memory_test
+    memory_test.cc
+ADDITIONAL_HEADERS
     ${MEMORY_PUBLIC_HEADERS}
+LINK_LIBS
+    base
 )
-set(MEMORY_TEST_PUBLIC_LIBRARIES base)
-
-abseil_test(memory_test)
-
 
 

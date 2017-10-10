@@ -19,21 +19,23 @@ file(GLOB SYNCHRONIZATION_INTERNAL_HEADERS "internal/*.h")
 
 
 # syncrhonisation library
-list(APPEND SYNCHRONIZATION_SRC
-    "barrier.cc"
-    "blocking_counter.cc"
-    "internal/create_thread_identity.cc"
-    "internal/per_thread_sem.cc"
-    "internal/waiter.cc"
-    "internal/graphcycles.cc"
-    "notification.cc"
-    "mutex.cc"
+abseil_library(synchronization
+    barrier.cc
+    blocking_counter.cc
+    internal/create_thread_identity.cc
+    internal/per_thread_sem.cc
+    internal/waiter.cc
+    internal/graphcycles.cc
+    notification.cc
+    mutex.cc
+ADDITIONAL_HEADERS
+    ${SYNCHRONIZATION_PUBLIC_HEADERS}
+    ${SYNCHRONIZATION_INTERNAL_HEADERS}
+LINK_LIBS
+    base
+    malloc_extension
+    time
 )
-set(SYNCHRONIZATION_PUBLIC_LIBRARIES base malloc_extension time)
-
-abseil_library(synchronization)
-
-
 install(FILES ${SYNCHRONIZATION_PUBLIC_HEADERS}
     DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/absl/synchronization)
 install(FILES ${SYNCHRONIZATION_INTERNAL_HEADERS}
@@ -45,45 +47,37 @@ install(FILES ${SYNCHRONIZATION_INTERNAL_HEADERS}
 
 
 # test barrier_test
-set(BARRIER_TEST_SRC "barrier_test.cc")
-set(BARRIER_TEST_PUBLIC_LIBRARIES synchronization)
-
-abseil_test(barrier_test)
-
-
-# test blocking_counter_test
-set(BLOCKING_COUNTER_TEST_SRC "blocking_counter_test.cc")
-set(BLOCKING_COUNTER_TEST_PUBLIC_LIBRARIES synchronization)
-
-abseil_test(blocking_counter_test)
-
-
-# test graphcycles_test
-set(GRAPHCYCLES_TEST_SRC "internal/graphcycles_test.cc")
-set(GRAPHCYCLES_TEST_PUBLIC_LIBRARIES synchronization)
-
-abseil_test(graphcycles_test)
-
-
-# test mutex_test
-set(MUTEX_TEST_SRC "mutex_test.cc")
-set(MUTEX_TEST_PUBLIC_LIBRARIES synchronization)
-
-abseil_test(mutex_test)
-
-
-# test notification_test
-set(NOTIFICATION_TEST_SRC "notification_test.cc")
-set(NOTIFICATION_TEST_PUBLIC_LIBRARIES synchronization)
-
-abseil_test(notification_test)
-
-
-# test per_thread_sem_test_common
-set(PER_THREAD_SEM_TEST_COMMON_SRC "internal/per_thread_sem_test.cc")
-set(PER_THREAD_SEM_TEST_COMMON_PUBLIC_LIBRARIES synchronization strings)
-
-abseil_test(per_thread_sem_test_common)
+abseil_library(barrier_test
+    barrier_test.cc
+LINK_LIBS
+    synchronization
+)
+abseil_test(blocking_counter_test
+    blocking_counter_test.cc
+LINK_LIBS
+    synchronization
+)
+abseil_test(graphcycles_test
+    internal/graphcycles_test.cc
+LINK_LIBS
+    synchronization
+)
+abseil_test(mutex_test
+    mutex_test.cc
+LINK_LIBS
+    synchronization
+)
+abseil_test(notification_test
+    notification_test.cc
+LINK_LIBS
+    synchronization
+)
+abseil_test(per_thread_sem_test_common
+    internal/per_thread_sem_test.cc
+LINK_LIBS
+    synchronization
+    strings
+)
 
 
 

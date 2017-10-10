@@ -16,26 +16,24 @@
 
 file(GLOB TYPES_PUBLIC_HEADERS "*.h")
 
-list(APPEND BAD_ANY_CAST_SRC
-    "bad_any_cast.cc"
-    ${TYPES_PUBLIC_HEADERS}
+abseil_library(bad_any_cast
+    bad_any_cast.cc
+ADDITIONAL_HEADERS
+    ${TYPE_PUBLIC_HEADERS}
+LINK_LIBS
+    base
 )
-set(BAD_ANY_CAST_PUBLIC_LIBRARIES base)
 
-abseil_library(bad_any_cast)
-
-
-
-set(OPTIONAL_SRC "optional.cc")
-set(OPTIONAL_PUBLIC_LIBRARIES base)
-
-abseil_library(optional)
-
-
-set(BAD_OPTIONAL_ACCESS_SRC "bad_optional_access.cc")
-set(BAD_OPTIONAL_ACCESS_LIBRARIES base)
-
-abseil_library(bad_optional_access)
+abseil_library(optional
+    optional.cc
+LINK_LIBS
+    base
+)
+abseil_library(bad_optional_access
+    bad_optional_access.cc
+LINK_LIBS
+    base
+)
 
 install(FILES ${TYPES_PUBLIC_HEADERS}
         DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/absl/types)
@@ -45,20 +43,19 @@ install(FILES ${TYPES_PUBLIC_HEADERS}
 ## TESTS
 #
 
-
+if (OFF)
 # test any_test
 set(ANY_TEST_SRC "any_test.cc")
 set(ANY_TEST_PUBLIC_LIBRARIES base throw_delegate bad_any_cast test_instance_tracker_lib)
 
-abseil_test(any_test)
-
-
-# test any_test_noexceptions
-set(ANY_TEST_NOEXCEPTIONS_SRC "any_test.cc")
-set(ANY_TEST_NOEXCEPTIONS_PUBLIC_LIBRARIES base throw_delegate bad_any_cast test_instance_tracker_lib)
-
-abseil_test(any_test_noexceptions)
-
+abseil_test(any_test
+    any_test.cc
+LINK_LIBS
+    base
+    throw_delegate
+    bad_any_cast
+    test_instance_tracker_lib
+)
 
 # test span_test
 set(SPAN_TEST_SRC "span_test.cc")
@@ -80,3 +77,4 @@ set(OPTIONAL_TEST_PUBLIC_LIBRARIES base throw_delegate optional bad_optional_acc
 abseil_test(optional_test)
 
 
+endif()

@@ -28,50 +28,61 @@ install(FILES ${CONTAINER_INTERNAL_HEADERS}
 ## TESTS
 #
 
-list(APPEND TEST_INSTANCE_TRACKER_LIB_SRC
-    "internal/test_instance_tracker.cc"
+abseil_library(test_instance_tracker_lib
+    INSTALL OFF
+    internal/test_instance_tracker.cc
+ADDITIONAL_HEADERS
     ${CONTAINER_PUBLIC_HEADERS}
     ${CONTAINER_INTERNAL_HEADERS}
-)
-set(TEST_INSTANCE_TRACKER_LIB_DISABLE_INSTALL TRUE)
-
-abseil_library(test_instance_tracker_lib)
+    )
 
 
 
 # test fixed_array_test
-set(FIXED_ARRAY_TEST_SRC "fixed_array_test.cc")
-set(FIXED_ARRAY_TEST_PUBLIC_LIBRARIES base throw_delegate test_instance_tracker_lib)
-
-abseil_test(fixed_array_test)
+abseil_test(fixed_array_test
+    fixed_array_test.cc
+LINK_LIBS
+    base
+    throw_delegate
+    test_instance_tracker_lib)
 
 
 # test fixed_array_test_noexceptions
 set(FIXED_ARRAY_TEST_NOEXCEPTIONS_SRC "fixed_array_test.cc")
 set(FIXED_ARRAY_TEST_NOEXCEPTIONS_PUBLIC_LIBRARIES base throw_delegate test_instance_tracker_lib)
 
-abseil_test(fixed_array_test_noexceptions)
-
-
-# test inlined_vector_test
-set(INLINED_VECTOR_TEST_SRC "inlined_vector_test.cc")
-set(INLINED_VECTOR_TEST_PUBLIC_LIBRARIES base throw_delegate test_instance_tracker_lib)
-
-abseil_test(inlined_vector_test)
+abseil_test(fixed_array_test_noexceptions
+    fixed_array_test.cc
+  LINK_LIBS
+    base
+    throw_delegate
+    test_instance_tracker_lib)
+abseil_test(inlined_vector_test
+    inlined_vector_test.cc
+LINK_LIBS
+    base throw_delegate
+    test_instance_tracker_lib
+)
 
 
 # test inlined_vector_test_noexceptions
 set(INLINED_VECTOR_TEST_NOEXCEPTIONS_SRC "inlined_vector_test.cc")
 set(INLINED_VECTOR_TEST_NOEXCEPTIONS_PUBLIC_LIBRARIES base throw_delegate test_instance_tracker_lib)
 
-abseil_test(inlined_vector_test_noexceptions)
+abseil_test(inlined_vector_test_noexceptions
+    inlined_vector_test.cc
+LINK_LIBS
+    base
+    throw_delegate
+    test_instance_tracker_lib
+)
 
-
-# test test_instance_tracker_test
-set(TEST_INSTANCE_TRACKER_TEST_SRC "internal/test_instance_tracker_test.cc")
-set(TEST_INSTANCE_TRACKER_TEST_PUBLIC_LIBRARIES base throw_delegate test_instance_tracker_lib)
-
-
-abseil_test(test_instance_tracker_test)
+abseil_test(test_instance_tracker_test
+    INTERNAL
+LINK_LIBS
+    base
+    throw_delegate
+    test_instance_tracker_lib
+)
 
 

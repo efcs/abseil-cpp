@@ -16,22 +16,16 @@
 
 file(GLOB META_PUBLIC_HEADERS "*.h")
 
-
 install(FILES ${META_PUBLIC_HEADERS}
         DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/absl/meta)
 
-
-#
-## TESTS
-#
-
 # test type_traits_test
-list(APPEND TYPE_TRAITS_TEST_SRC
-    "type_traits_test.cc"
+abseil_test(type_traits_test
+    type_traits_test.cc
+ADDITIONAL_HEADERS
     ${META_PUBLIC_HEADERS}
 )
 
-abseil_test(type_traits_test)
 
 
 

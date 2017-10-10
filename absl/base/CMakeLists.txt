@@ -18,33 +18,34 @@ file(GLOB BASE_PUBLIC_HEADERS "*.h")
 file(GLOB BASE_INTERNAL_HEADERS "internal/*.h")
 
 # base main library
-list(APPEND BASE_SRC
-    "internal/cycleclock.cc"
-    "internal/raw_logging.cc"
-    "internal/spinlock.cc"
-    "internal/sysinfo.cc"
-    "internal/thread_identity.cc"
-    "internal/unscaledcycleclock.cc"
-    "internal/spinlock_wait.cc"
-    "internal/low_level_alloc.cc"
-    "internal/malloc_hook.cc"
-    "dynamic_annotations.cc"
+abseil_library(base
+    internal/cycleclock.cc
+    internal/raw_logging.cc
+    internal/spinlock.cc
+    internal/sysinfo.cc
+    internal/thread_identity.cc
+    internal/unscaledcycleclock.cc
+    internal/spinlock_wait.cc
+    internal/low_level_alloc.cc
+    internal/malloc_hook.cc
+    dynamic_annotations.cc
+  ADDITIONAL_HEADERS
     ${BASE_PUBLIC_HEADERS}
     ${BASE_INTERNAL_HEADERS}
 )
 
-abseil_library(base)
 
 # malloc extension library
-set(MALLOC_EXTENSION_SRC "internal/malloc_extension.cc")
-set(MALLOC_EXTENSION_PUBLIC_LIBRARIES base)
-
-abseil_library(malloc_extension)
+abseil_library(malloc_extension
+  internal/malloc_extension.cc
+LINK_LIBS
+  base
+)
 
 # throw delegate library
-set(THROW_DELEGATE_SRC "internal/throw_delegate.cc")
-
-abseil_library(throw_delegate)
+abseil_library(throw_delegate
+  internal/throw_delegate.cc
+)
 
 
 install(FILES ${BASE_PUBLIC_HEADERS}
@@ -57,23 +58,27 @@ install(FILES ${BASE_INTERNAL_HEADERS}
 #
 
 # call once test
-set(CALL_ONCE_TEST_SRC "call_once_test.cc")
-set(CALL_ONCE_TEST_PUBLIC_LIBRARIES base synchronization)
+set(TEST_ON OFF)
 
-abseil_test(call_once_test)
+abseil_test(call_once_test
+  call_once_test.cc
+LINK_LIBS
+  base
+  synchronization
+)
 
-
+if (TEST_ON)
 # test bit_cast_test
 set(BIT_CAST_TEST_SRC "bit_cast_test.cc")
 
 abseil_test(bit_cast_test)
 
-
-# test throw_delegate_test
-set(THROW_DELEGATE_TEST_SRC "throw_delegate_test.cc")
-set(THROW_DELEGATE_TEST_PUBLIC_LIBRARIES base throw_delegate)
-
-abseil_test(throw_delegate_test)
+abseil_test(throw_delegate_test
+    throw_delegate_test.cc
+LINK_LIBS
+    base
+    throw_delegate
+)
 
 
 # test invoke_test
@@ -144,6 +149,6 @@ set(MALLOC_EXTENSION_SYSTEM_MALLOC_TEST_PRIVATE_COMPILE_FLAGS "-DABSL_MALLOC_EXT
 
 abseil_test(malloc_extension_system_malloc_test)
 
-
+endif()
 
 

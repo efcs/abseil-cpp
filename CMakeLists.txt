@@ -23,7 +23,7 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
 
 include(GNUInstallDirs)
 include(ReleaseDebugAutoFlags)
-include(AbseilHelpers)
+
 
 
 # config options
@@ -70,4 +70,5 @@ list(APPEND ABSL_TEST_COMMON_LIBRARIES
     ${CMAKE_THREAD_LIBS_INIT}
 )
 
+include(AbseilHelpers)
 add_subdirectory(absl)

@@ -17,27 +17,19 @@
 
 file(GLOB UTILITY_PUBLIC_HEADERS "*.h")
 
-list(APPEND UTILITY_SRC
-    "utility.cc"
+abseil_library(utility
+    utility.cc
+ADDITIONAL_HEADERS
     ${UTILITY_PUBLIC_HEADERS}
 )
-
-add_library(utility STATIC ${UTILITY_SRC})
-
-
-
 install(FILES ${UTILITY_PUBLIC_HEADERS}
         DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/absl/utility)
 
-#
-## TESTS
-#
-
-# test utility_test
-set(UTILITY_TEST_SRC "utility_test.cc")
-set(UTILITY_TEST_PUBLIC_LIBRARIES utility)
-
-abseil_test(utility_test)
+abseil_test(utility_test
+    utility_test.cc
+LINK_LIBS
+    utility
+)
 
 
 
