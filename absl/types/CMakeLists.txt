@@ -35,19 +35,6 @@ LINK_LIBS
     base
 )
 
-install(FILES ${TYPES_PUBLIC_HEADERS}
-        DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/absl/types)
-
-
-#
-## TESTS
-#
-
-if (OFF)
-# test any_test
-set(ANY_TEST_SRC "any_test.cc")
-set(ANY_TEST_PUBLIC_LIBRARIES base throw_delegate bad_any_cast test_instance_tracker_lib)
-
 abseil_test(any_test
     any_test.cc
 LINK_LIBS
@@ -56,25 +43,20 @@ LINK_LIBS
     bad_any_cast
     test_instance_tracker_lib
 )
-
-# test span_test
-set(SPAN_TEST_SRC "span_test.cc")
-set(SPAN_TEST_PUBLIC_LIBRARIES base strings throw_delegate bad_any_cast test_instance_tracker_lib)
-
-abseil_test(span_test)
-
-
-# test span_test_noexceptions
-set(SPAN_TEST_NOEXCEPTIONS_SRC "span_test.cc")
-set(SPAN_TEST_NOEXCEPTIONSPUBLIC_LIBRARIES base throw_delegate bad_any_cast test_instance_tracker_lib)
-
-
-
-# test optional_test
-set(OPTIONAL_TEST_SRC "optional_test.cc")
-set(OPTIONAL_TEST_PUBLIC_LIBRARIES base throw_delegate optional bad_optional_access)
-
-abseil_test(optional_test)
-
-
-endif()
+abseil_test(span_test
+    span_test.cc
+LINK_LIBS
+    base
+    strings
+    throw_delegate
+    bad_any_cast
+    test_instance_tracker_lib
+)
+abseil_test(optional_test
+    optional_test.cc
+LINK_LIBS
+    base
+    throw_delegate
+    optional
+    bad_optional_access
+)

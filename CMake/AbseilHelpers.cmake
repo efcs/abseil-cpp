@@ -29,7 +29,8 @@ function(abseil_library Name)
     endif()
     target_compile_options(${Name} PRIVATE ${ABSL_COMPILE_CXXFLAGS} )
     target_link_libraries(${Name} ${ARG_LINK_LIBS})
-
+    install(FILES ${ARG_ADDITIONAL_HEADERS}
+        DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/absl/${Name})
     if(${ARG_INSTALL})
         install(TARGETS ${Name}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
